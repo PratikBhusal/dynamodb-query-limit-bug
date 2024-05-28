@@ -26,7 +26,7 @@ assertJ = "3.25.3"
 delta-coverage = "2.3.0"
 kotest = "5.9.0" # BOM-like
 junit = "5.10.2" # BOM-like
-kotlinx-kover = "0.7.6"
+kotlinx-kover = "0.8.0"
 mockK = "1.13.11"
 
 [libraries]
