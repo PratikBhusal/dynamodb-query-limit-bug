@@ -1,8 +1,10 @@
 package org.example.persistence.ddb.dao.impl
 
+import arrow.core.toNonEmptyListOrNull
 import java.util.UUID
 import org.example.persistence.ddb.dao.ProductDao
 import org.example.persistence.ddb.model.ProductRecord
+import org.example.persistence.util.model.PositiveInt
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable
 import software.amazon.awssdk.enhanced.dynamodb.Key
@@ -20,16 +22,22 @@ class DefaultProductDao(
         TableSchema.fromImmutableClass(ProductRecord::class.java),
     )
 
-    override fun query(categoryId: UUID, limit: UInt?, isStronglyConsistentRead: Boolean) =
+    /**
+     * @see <a href="https://github.com/aws/aws-sdk-java-v2/issues/1951">aws-sdk-java-v2/issues/1951</a>
+     * @see <a href="https://github.com/aws/aws-sdk-java-v2/issues/3226#issuecomment-1151398233">aws-sdk-java-v2/issues/3226</a>
+     */
+    @Suppress("detekt:style:MaxLineLength")
+    override fun query(categoryId: UUID, itemsPerPage: PositiveInt?, isStronglyConsistentRead: Boolean) =
         table.queryWithEnhancedRequest {
             keyEqualTo {
                 partitionValue(categoryId.toString())
             }
             consistentRead(isStronglyConsistentRead)
-            limit(limit?.toInt())
+            limit(itemsPerPage?.toInt())
             scanIndexForward(false)
         }
-            .flatMap { it.items() }
+            .asSequence()
+            .mapNotNull { it.items().toNonEmptyListOrNull() }
 }
 
 private fun DynamoDbTable<ProductRecord>.queryWithEnhancedRequest(
