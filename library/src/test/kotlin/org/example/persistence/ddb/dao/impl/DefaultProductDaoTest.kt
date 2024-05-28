@@ -12,6 +12,7 @@ import org.example.persistence.ddb.Constants.DYNAMODB_PARTITION_KEY_ATTRIBUTE_SH
 import org.example.persistence.ddb.Constants.DYNAMODB_SORT_KEY_ATTRIBUTE_SHORTNAME
 import org.example.persistence.ddb.dao.ProductDao
 import org.example.persistence.ddb.model.ProductRecord
+import org.example.persistence.util.model.PositiveInt
 import org.example.testing.extension.DynamoDbLocalClientExtension
 import org.example.testing.extension.DynamoDbLocalClientExtension.Companion.createTable
 import org.example.testing.extension.DynamoDbLocalClientExtension.Companion.deleteTable
@@ -81,10 +82,10 @@ class DefaultProductDaoTest {
     }
 
     @Test
-    fun `query returns less than the max items when there are 25 in the partition`() {
+    fun `query returns at most 12 items per page`() {
         table.scan().flatMap { it.items() }.shouldHaveSize(0)
 
-        val limit = DYNAMODB_MAX_ITEMS_PER_WRITEBATCH / 2u
+        val limit = PositiveInt(DYNAMODB_MAX_ITEMS_PER_WRITEBATCH / 2u)
 
         val records = (0..<(DYNAMODB_MAX_ITEMS_PER_WRITEBATCH * 2u).toInt()).map {
             ProductRecord.build {
@@ -101,15 +102,15 @@ class DefaultProductDaoTest {
             }
         }
 
-        withClue("query returned $limit items from the table") {
-            val actual = dao.query(
-                DEFAULT_CATEGORY_ID,
-                limit,
-            )
+        val actual = dao.query(
+            DEFAULT_CATEGORY_ID,
+            limit,
+        )
 
-            actual.size.shouldBeLessThanOrEqual(limit.toInt())
-            actual.shouldBeSmallerThan(records)
-            records.shouldContainAll(actual)
+        actual.forEach {
+            it.size.shouldBeLessThanOrEqual(limit.toInt())
+            it.shouldBeSmallerThan(records)
+            records.shouldContainAll(it)
         }
     }
 }
