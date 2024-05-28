@@ -1,0 +1,89 @@
+# https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
+
+[versions]
+arrow-core = "1.2.4"
+fasterxml-uuid-v7-generator = "5.0.0"
+kotlinx-collections-immutable = "0.3.7"
+task-tree = "3.0.0"
+
+# AWS
+aws-sdk = "2.25.56" # BOM-like
+dynamoDBLocal = "2.4.0"
+
+# Kotlin
+detekt = "1.23.6"
+kotlin = "2.0.0" # BOM-like
+ktlint = "12.1.1"
+kotlin-dokka = "1.9.20"
+
+# Logging
+log4j = "2.23.1" # BOM-like
+oshai-kotlin-logging =  "6.0.9"
+slf4j = "2.0.13"
+
+# Testing
+assertJ = "3.25.3"
+delta-coverage = "2.3.0"
+kotest = "5.9.0" # BOM-like
+junit = "5.10.2" # BOM-like
+kotlinx-kover = "0.7.6"
+mockK = "1.13.11"
+
+[libraries]
+arrow-core = { module = "io.arrow-kt:arrow-core-jvm", version.ref = "arrow-core" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm", version.ref = "kotlinx-collections-immutable" }
+fasterxml-uuid-v7-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version.ref = "fasterxml-uuid-v7-generator" }
+
+# AWS
+dynamodb-enhanced-client = { module = "software.amazon.awssdk:dynamodb-enhanced", version.ref = "aws-sdk" }
+dynamodb-local = { module = "com.amazonaws:DynamoDBLocal", version.ref = "dynamoDBLocal" }
+aws-url-connection-client = { module = "software.amazon.awssdk:url-connection-client", version.ref = "aws-sdk" }
+
+# Logging
+log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
+log4j-slf4j2-impl = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
+oshai-kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "oshai-kotlin-logging" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+
+# Testing
+assertJ = { module = "org.assertj:assertj-core", version.ref = "assertJ" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotest" }
+junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+mockK = { module = "io.mockk:mockk", version.ref = "mockK" }
+
+[plugins]
+task-tree = { id = "com.dorongold.task-tree", version.ref = "task-tree"}
+
+# Kotlin
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-dokka = { id = "org.jetbrains.dokka", version.ref = "kotlin-dokka" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+
+# Code Formatting
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint"}
+
+# Code Quality
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt"}
+
+# Code Coverage
+delta-coverage = { id = "io.github.surpsg.delta-coverage", version.ref = "delta-coverage" }
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinx-kover" }
+
+[bundles]
+aws-dynamodb-local = [
+    "dynamodb-local",
+    "aws-url-connection-client"
+]
+jvm-shared-logging-implementation = [
+    "log4j-api",
+    "log4j-slf4j2-impl",
+    "oshai-kotlin-logging",
+    "slf4j-api",
+]
+jvm-shared-testing = [
+    "assertJ",
+    "kotest-assertions",
+    "junit",
+    "mockK",
+]
