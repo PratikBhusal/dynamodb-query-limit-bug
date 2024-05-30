@@ -7,7 +7,7 @@ kotlinx-collections-immutable = "0.3.7"
 task-tree = "3.0.0"
 
 # AWS
-aws-sdk = "2.25.56" # BOM-like
+aws-sdk = "2.25.62" # BOM-like
 dynamoDBLocal = "2.4.0"
 
 # Kotlin
