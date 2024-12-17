@@ -2,7 +2,7 @@
 
 [versions]
 arrow-core = "1.2.4"
-fasterxml-uuid-v7-generator = "5.0.0"
+fasterxml-uuid-v7-generator = "5.1.0"
 kotlinx-collections-immutable = "0.3.7"
 task-tree = "3.0.0"
 
