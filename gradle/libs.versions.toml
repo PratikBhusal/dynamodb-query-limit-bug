@@ -8,7 +8,7 @@ task-tree = "3.0.0"
 
 # AWS
 aws-sdk = "2.25.56" # BOM-like
-dynamoDBLocal = "2.4.0"
+dynamoDBLocal = "2.5.3"
 
 # Kotlin
 detekt = "1.23.6"
