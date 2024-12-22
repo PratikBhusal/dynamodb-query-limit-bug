@@ -4,7 +4,7 @@
 arrow-core = "1.2.4"
 fasterxml-uuid-v7-generator = "5.0.0"
 kotlinx-collections-immutable = "0.3.7"
-task-tree = "3.0.0"
+task-tree = "4.0.0"
 
 # AWS
 aws-sdk = "2.25.56" # BOM-like
